@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Custom: Keep the SQLite database for others to use
+!messaging.db
+
+ 
