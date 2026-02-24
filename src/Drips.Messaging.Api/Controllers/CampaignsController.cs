@@ -58,10 +58,9 @@ public class CampaignsController : ControllerBase
     [HttpGet]  
     public async Task<IActionResult> GetAll(CancellationToken ct)
     {
-        // 1. Call your repository method
         var campaigns = await _campaignRepository.GetAllCampaigns(ct);
 
-        // 2. Return 200 OK with the list (even if empty [])
+        //return 200 OK with the list (even if empty [])
         return Ok(campaigns);
     }
 
@@ -91,10 +90,10 @@ public class CampaignsController : ControllerBase
 
         if (campaign == null)
         {
-            return NotFound(); // Returns 404 if the ID doesn't exist
+            return NotFound(); // returns 404 if the ID doesn't exist
         }
 
-        return Ok(campaign); // Returns 200 with the Campaign object
+        return Ok(campaign); // returns 200 with the Campaign object
     }
 
 

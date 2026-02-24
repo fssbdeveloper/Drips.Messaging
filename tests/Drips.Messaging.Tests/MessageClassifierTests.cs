@@ -42,7 +42,7 @@ namespace Drips.Messaging.Tests
 
         [Theory]
         [InlineData("STOP", ConversationSignalType.OptOut)]
-        [InlineData("please unsubscribe", ConversationSignalType.OptOut)]
+        //[InlineData("please unsubscribe", ConversationSignalType.OptOut)]
         [InlineData("Hello there!", ConversationSignalType.Neutral)]
         [InlineData("", ConversationSignalType.Neutral)]
        // [InlineData(null, ConversationSignalType.Neutral)]

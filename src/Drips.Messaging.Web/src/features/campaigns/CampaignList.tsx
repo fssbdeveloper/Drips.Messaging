@@ -69,150 +69,95 @@ export default function CampaignList() {
     };
 
     return (
-        <div style={styles.page}>
-            <div style={styles.card}>
-                <h2 style={styles.title}>Campaigns</h2>
+        <div className="container py-4">
+            <div className="card shadow-sm">
+                <div className="card-body">
+                    <h2 className="mb-4">Campaigns</h2>
 
-                <ul style={styles.list}>
-                    {campaigns.map(c => (
-                        <li key={c.id} style={styles.listItem}>
-                            <div
-                                style={styles.campaignRow}
-                                onClick={() => loadConversations(c.id)}
-                            >
-                                {c.name}
-                            </div>
+                    <ul className="list-group">
+                        {campaigns.map(c => (
+                            <li key={c.id} className="list-group-item border-0 px-0">
 
-                            {selectedCampaignId === c.id && (
-                                <ul style={styles.subList}>
-                                    {conversations.length === 0 && (
-                                        <li style={styles.empty}>No conversations yet.</li>
-                                    )}
+                                {/* CAMPAIGN ROW WITH CHEVRON */}
+                                <div
+                                    className="p-3 bg-light rounded fw-semibold mb-2 d-flex justify-content-between align-items-center"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => loadConversations(c.id)}
+                                >
+                                    {c.name}
 
-                                    {conversations.map(conv => (
-                                        <li key={conv.id} style={styles.listItem}>
-                                            <div
-                                                style={styles.conversationRow}
-                                                onClick={() => loadMessages(conv.id)}
-                                            >
-                                                📞 {conv.leadPhone}
-                                                <span style={styles.timestamp}>
-                                                    {new Date(conv.startedAt).toLocaleString()}
-                                                </span>
-                                            </div>
+                                    <i
+                                        className={`bi ${selectedCampaignId === c.id
+                                                ? "bi-chevron-down"
+                                                : "bi-chevron-right"
+                                            }`}
+                                    ></i>
+                                </div>
 
-                                            {selectedConversationId === conv.id && (
-                                                <div style={styles.chatContainer}>
-                                                    {messages.length === 0 && (
-                                                        <div style={styles.empty}>No messages yet.</div>
-                                                    )}
+                                {/* CONVERSATIONS */}
+                                {selectedCampaignId === c.id && (
+                                    <ul className="list-group ms-3">
+                                        {conversations.length === 0 && (
+                                            <li className="text-muted fst-italic">No conversations yet.</li>
+                                        )}
 
-                                                    {messages.map(msg => (
-                                                        <div
-                                                            key={msg.id}
-                                                            style={{
-                                                                ...styles.message,
-                                                                ...(msg.direction === 1
-                                                                    ? styles.outbound
-                                                                    : styles.inbound)
-                                                            }}
-                                                        >
-                                                            {msg.content}
-                                                        </div>
-                                                    ))}
+                                        {conversations.map(conv => (
+                                            <li key={conv.id} className="list-group-item border-0 px-0">
+
+                                                {/* CONVERSATION ROW WITH CHEVRON */}
+                                                <div
+                                                    className="d-flex justify-content-between align-items-center p-2 bg-white border rounded"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={() => loadMessages(conv.id)}
+                                                >
+                                                    <span>📞 {conv.leadPhone}</span>
+
+                                                    <div className="d-flex align-items-center gap-2">
+                                                        <span className="text-muted small">
+                                                            {new Date(conv.startedAt).toLocaleString()}
+                                                        </span>
+
+                                                        <i
+                                                            className={`bi ${selectedConversationId === conv.id
+                                                                    ? "bi-chevron-down"
+                                                                    : "bi-chevron-right"
+                                                                }`}
+                                                        ></i>
+                                                    </div>
                                                 </div>
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+
+                                                {/* MESSAGES */}
+                                                {selectedConversationId === conv.id && (
+                                                    <div className="border rounded p-3 mt-2 bg-light">
+                                                        {messages.length === 0 && (
+                                                            <div className="text-muted fst-italic">
+                                                                No messages yet.
+                                                            </div>
+                                                        )}
+
+                                                        {messages.map(msg => (
+                                                            <div
+                                                                key={msg.id}
+                                                                className={`p-2 rounded mb-2 w-75 ${msg.direction === 1
+                                                                        ? "bg-primary text-white ms-auto"
+                                                                        : "bg-secondary text-white me-auto"
+                                                                    }`}
+                                                            >
+                                                                {msg.content}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );
 }
-
-const styles: { [key: string]: React.CSSProperties } = {
-    page: {
-        background: "#f4f6f9",
-        minHeight: "100vh",
-        padding: "40px",
-        display: "flex",
-        justifyContent: "center"
-    },
-    card: {
-        background: "white",
-        padding: "30px",
-        borderRadius: "12px",
-        width: "700px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.1)"
-    },
-    title: {
-        marginBottom: "25px"
-    },
-    list: {
-        listStyle: "none",
-        padding: 0
-    },
-    listItem: {
-        marginBottom: "15px"
-    },
-    campaignRow: {
-        cursor: "pointer",
-        fontWeight: "bold",
-        padding: "10px",
-        borderRadius: "8px",
-        background: "#eef2ff",
-        border: "1px solid #c7d2fe"
-    },
-    subList: {
-        listStyle: "none",
-        paddingLeft: "20px",
-        marginTop: "10px"
-    },
-    conversationRow: {
-        cursor: "pointer",
-        padding: "8px 10px",
-        borderRadius: "6px",
-        background: "#f3f4f6",
-        border: "1px solid #e5e7eb",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center"
-    },
-    timestamp: {
-        fontSize: "0.8rem",
-        color: "#666"
-    },
-    empty: {
-        color: "#777",
-        fontStyle: "italic",
-        padding: "5px 0"
-    },
-    chatContainer: {
-        border: "1px solid #eee",
-        borderRadius: "8px",
-        padding: "15px",
-        marginTop: "10px",
-        background: "#fafafa"
-    },
-    message: {
-        padding: "8px 12px",
-        borderRadius: "18px",
-        marginBottom: "8px",
-        maxWidth: "70%"
-    },
-    outbound: {
-        background: "#2563eb",
-        color: "white",
-        marginLeft: "auto"
-    },
-    inbound: {
-        background: "#e5e7eb",
-        color: "#333",
-        marginRight: "auto"
-    }
-};
  

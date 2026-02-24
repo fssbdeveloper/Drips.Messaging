@@ -1,73 +1,156 @@
-# React + TypeScript + Vite
+Project Overview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. Problem Description and Target User
 
-Currently, two official plugins are available:
+-------Problem-------
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Sales and business development teams often manage outbound communication with leads across fragmented tools (CRM, email, SMS platforms). This creates:
 
-## React Compiler
+Inconsistent communication tracking
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Limited visibility into outreach history
 
-## Expanding the ESLint configuration
+Manual copy/paste workflows
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Poor auditability
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The goal of this application is to provide a centralized interface where users can initiate and track SMS conversations with leads in a structured, auditable manner.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+-------Target User-------
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The primary users are:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Sales representatives
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Business development teams
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Customer success personnel
+
+These users need a fast, intuitive interface to:
+
+Enter or select a lead
+
+Initiate a new message
+
+Maintain conversation history
+
+Track communication in a centralized system
+
+The system prioritizes clarity, speed, and minimal friction for high-frequency use.
+
+2. Architecture Overview
+
+The application follows a layered, service-oriented architecture designed for separation of concerns, scalability, and maintainability.
+
+-------High-Level Structure-------
+
+Presentation Layer
+Handles UI interactions and user input validation.
+
+API Layer
+Exposes endpoints for conversation creation, message persistence, and retrieval.
+
+Service Layer
+Encapsulates business logic (conversation lifecycle, validation rules, etc.).
+
+Data Access Layer
+Responsible for persistence using a repository pattern abstraction.
+
+Database Layer
+Stores Leads, Conversations, and Messages with relational integrity.
+
+-------Architectural Principles-------
+
+Dependency Injection for loose coupling
+
+SOLID principles (notably SRP and DIP)
+
+Repository pattern for persistence abstraction
+
+Clear separation between domain models and DTOs
+
+Asynchronous operations for scalability
+
+This structure enables future extensibility (e.g., adding email, WhatsApp, or automated workflows) without major refactoring.
+
+3. Key Assumptions and Tradeoffs
+
+-------Assumptions-------
+
+A valid phone number uniquely identifies a lead at the time of message creation
+
+SMS is the initial and primary communication channel
+
+Conversations are stored internally rather than relying solely on third-party systems
+
+-------Tradeoffs-------
+
+Simplicity over feature completeness
+The initial implementation focuses on core messaging functionality rather than automation, templates, or analytics.
+
+Single-channel design
+The system is structured to support expansion, but currently optimized for SMS only.
+
+Minimal UI complexity
+The UX prioritizes speed and clarity over advanced filtering or tagging features.
+
+These tradeoffs were intentional to deliver a clean, maintainable foundation.
+
+4. AI Usage Summary
+
+-------AI tools were used to:-------
+
+Refine UX wording and improve microcopy clarity
+
+Review architectural decisions for best practices
+
+Assist in documentation structure and formatting
+
+All architectural decisions, design patterns, and implementation logic were reviewed and validated to ensure alignment with enterprise development standards.
+
+No AI-generated code was used without developer validation and adaptation.
+
+
+5. What I Would Improve With More Time
+
+-------With additional time, I would focus on:-------
+
+1. Enhanced Domain Modeling
+
+-Explicit conversation state management
+
+-More granular validation rules
+
+-Improved audit logging
+
+2. Security Hardening
+
+-Role-based authorization
+
+-Rate limiting for message creation
+
+-Improved input validation and sanitization
+
+3. Observability
+
+-Structured logging
+
+-Metrics collection (message volume, response time)
+
+-Health checks
+
+4. UX Improvements
+
+-Lead lookup autocomplete
+
+-Conversation search and filtering
+
+-Message templates
+
+5. Scalability Enhancements
+
+-Background processing for outbound messaging
+
+-Queue-based architecture for high throughput
+
+-Horizontal scaling strategy documentation 
