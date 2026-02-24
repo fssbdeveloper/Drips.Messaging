@@ -1,0 +1,6 @@
+@Drips.Messaging.Api_HostAddress = http://localhost:5039
+
+GET {{Drips.Messaging.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
