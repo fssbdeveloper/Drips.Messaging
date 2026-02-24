@@ -1,3 +1,15 @@
+This document provides an overview of the architecture, design decisions, and implementation details for the Drips Messaging Web application. 
+It outlines the problem being addressed, the target user base, the architectural structure, key assumptions and tradeoffs, AI usage summary, and areas for improvement with additional time.
+
+The application follows best practices for enterprise development, including separation 
+of concerns, dependency injection, and adherence to SOLID principles.
+
+Data is stored in a SQLite database (messaging.db) for simplicity and ease of setup, but the 
+architecture is designed to allow for easy migration to more robust databases in the future. 
+messaging.db is stored in the root of the API project for easy access and is initialized 
+with the necessary schema on application startup.
+
+
 Project Overview
 
 1. Problem Description and Target User
@@ -149,3 +161,11 @@ No AI-generated code was used without developer validation and adaptation.
 -Queue-based architecture for high throughput
 
 -Horizontal scaling strategy documentation 
+
+6. Database Optimization
+	
+- Remove SQLite dependency and implement a more robust relational database solution (e.g., PostgreSQL) for better performance and scalability.
+	- Implement database indexing and query optimization strategies to improve data retrieval times, especially as the volume of conversations and messages grows.
+	- Never use Inline SQL queries in the codebase; instead, utilize Stored Procedures/ ORM (Object-Relational Mapping) tool to abstract database interactions and enhance security against SQL injection attacks.
+	- Regularly review and refactor database schemas to accommodate evolving application requirements and ensure optimal performance.
+	- 
