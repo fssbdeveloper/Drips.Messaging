@@ -22,9 +22,9 @@ interface Message {
 }
 
 export default function CampaignBuilder() {
-    // ---------------- STATE ----------------
     const [campaignName, setCampaignName] = useState("");
     const [campaignError, setCampaignError] = useState("");
+
     const [campaign, setCampaign] = useState<Campaign | null>(null);
 
     const [leadPhone, setLeadPhone] = useState("");
@@ -36,117 +36,73 @@ export default function CampaignBuilder() {
     const [direction, setDirection] = useState<number>(1);
     const [messages, setMessages] = useState<Message[]>([]);
 
-    // ---------------- VALIDATION HELPERS ----------------
-    const validateCampaignName = (name: string) => {
-        if (!name.trim()) return "Please enter a campaign name.";
-        if (name.length < 3) return "Campaign name must be at least 3 characters.";
-        return "";
-    };
-
-    const validatePhone = (phone: string) => {
-        if (!phone.trim()) return "Please enter a phone number.";
-        if (!/^[0-9+\-\s()]+$/.test(phone)) {
-            return "Phone numbers may only contain digits, spaces, +, -, and parentheses.";
-        }
-        if (phone.replace(/\D/g, "").length < 10) {
-            return "Phone number must contain at least 10 digits.";
-        }
-        return "";
-    };
-
-    const validateMessage = (msg: string) => {
-        if (!msg.trim()) return "Message cannot be empty.";
-        if (msg.length > 500) return "Messages cannot exceed 500 characters.";
-        return "";
-    };
-
     // ---------------- CREATE CAMPAIGN ----------------
     const createCampaign = async () => {
-        const error = validateCampaignName(campaignName);
-        if (error) {
-            setCampaignError(error);
+        if (!campaignName.trim()) {
+            setCampaignError("Campaign name is required.");
             return;
         }
 
         setCampaignError("");
 
-        try {
-            const res = await api.post("/campaigns", { name: campaignName });
-            setCampaign(res.data);
-            setCampaignName("");
-        } catch {
-            setCampaignError("Something went wrong while creating the campaign. Please try again.");
-        }
+        const res = await api.post("/campaigns", { name: campaignName });
+
+        setCampaign(res.data);
+        setCampaignName("");
     };
 
     // ---------------- CREATE CONVERSATION ----------------
     const createConversation = async () => {
-        if (!campaign) {
-            setConversationError("Please create a campaign first.");
+        if (!leadPhone.trim()) {
+            setConversationError("Lead phone is required.");
             return;
         }
 
-        const error = validatePhone(leadPhone);
-        if (error) {
-            setConversationError(error);
+        if (!/^[0-9+\-\s()]+$/.test(leadPhone)) {
+            setConversationError("Invalid phone number format.");
             return;
         }
 
         setConversationError("");
 
-        try {
-            const res = await api.post(
-                `/campaigns/${campaign.id}/conversations`,
-                { leadPhone }
-            );
-            setConversation(res.data);
-            setLeadPhone("");
-        } catch {
-            setConversationError("Unable to create conversation. Please try again.");
-        }
+        const res = await api.post(
+            `/campaigns/${campaign!.id}/conversations`,
+            { leadPhone }
+        );
+
+        setConversation(res.data);
+        setLeadPhone("");
     };
 
     // ---------------- LOAD MESSAGES ----------------
     const loadMessages = async () => {
         if (!conversation) return;
 
-        try {
-            const res = await api.get(`/campaigns/${conversation.id}/messages`);
-            setMessages(res.data);
-        } catch {
-            setMessageError("Unable to load messages.");
-        }
+        const res = await api.get(
+            `/campaigns/${conversation.id}/messages`
+        );
+
+        setMessages(res.data);
     };
 
     // ---------------- SEND MESSAGE ----------------
     const sendMessage = async () => {
-        if (!conversation) {
-            setMessageError("Please create a conversation first.");
-            return;
-        }
-
-        const error = validateMessage(content);
-        if (error) {
-            setMessageError(error);
+        if (!content.trim()) {
+            setMessageError("Message content cannot be empty.");
             return;
         }
 
         setMessageError("");
 
-        try {
-            await api.post(
-                `/campaigns/${conversation.id}/messages`,
-                { content, direction }
-            );
+        await api.post(
+            `/campaigns/${conversation!.id}/messages`,
+            { content, direction }
+        );
 
-            setContent("");
-            await loadMessages();
-        } catch {
-            setMessageError("Failed to send message. Please try again.");
-        }
+        setContent("");
+        await loadMessages();
     };
 
-    // ---------------- UI ----------------
     return (
         <div style={styles.page}>
             <div style={styles.card}>
@@ -163,15 +119,21 @@ export default function CampaignBuilder() {
                         placeholder="Campaign Name"
                     />
 
-                    {campaignError && <div style={styles.error}>{campaignError}</div>}
+                    {campaignError && (
+                        <div style={styles.error}>{campaignError}</div>
+                    )}
 
-                    <button style={styles.button} onClick={createCampaign}>
+                    <button
+                        style={styles.button}
+                        onClick={createCampaign}
+                        disabled={!campaignName.trim()}
+                    >
                         Create Campaign
                     </button>
 
                     {campaign && (
                         <div style={styles.success}>
-                            Campaign created: <strong>{campaign.name}</strong>
+                            Created: {campaign.name}
                         </div>
                     )}
                 </section>
@@ -192,13 +154,17 @@ export default function CampaignBuilder() {
                             <div style={styles.error}>{conversationError}</div>
                         )}
 
-                        <button style={styles.button} onClick={createConversation}>
+                        <button
+                            style={styles.button}
+                            onClick={createConversation}
+                            disabled={!leadPhone.trim()}
+                        >
                             Add Conversation
                         </button>
 
                         {conversation && (
                             <div style={styles.success}>
-                                Conversation started with <strong>{conversation.leadPhone}</strong>
+                                Conversation with {conversation.leadPhone}
                             </div>
                         )}
                     </section>
@@ -229,7 +195,9 @@ export default function CampaignBuilder() {
                             <select
                                 style={styles.select}
                                 value={direction}
-                                onChange={e => setDirection(Number(e.target.value))}
+                                onChange={e =>
+                                    setDirection(Number(e.target.value))
+                                }
                             >
                                 <option value={1}>Outbound</option>
                                 <option value={2}>Inbound</option>
@@ -242,7 +210,11 @@ export default function CampaignBuilder() {
                                 placeholder="Type message..."
                             />
 
-                            <button style={styles.button} onClick={sendMessage}>
+                            <button
+                                style={styles.button}
+                                onClick={sendMessage}
+                                disabled={!content.trim()}
+                            >
                                 Send
                             </button>
                         </div>

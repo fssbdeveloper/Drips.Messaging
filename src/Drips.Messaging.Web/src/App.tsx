@@ -8,10 +8,12 @@ export default function App() {
         <div style={{ padding: 20 }}>
             <h1>Drips</h1>
 
-            <nav>
-                <Link to="/">Campaigns</Link> |{" "}
-                <Link to="/create">Create Campaign</Link>
+            <nav style={styles.nav}>
+                <Link to="/" style={styles.navLink}>Campaigns</Link>
+                <span style={styles.divider}>|</span>
+                <Link to="/create" style={styles.navLink}>Create Campaign</Link>
             </nav>
+
 
             <Routes>
                 <Route path="/" element={<CampaignList />} />
@@ -23,6 +25,25 @@ export default function App() {
 }
 
 
+const styles: { [key: string]: React.CSSProperties } = {
+    nav: {
+        display: "flex",
+        gap: "12px",
+        alignItems: "center",
+        marginBottom: "20px"
+    },
+    navLink: {
+        textDecoration: "none",
+        color: "#2563eb",
+        fontWeight: 500,
+        padding: "6px 10px",
+        borderRadius: "6px",
+        transition: "0.2s ease",
+    },
+    divider: {
+        color: "#999"
+    }
+};
 
 
 //import { useState } from 'react'
