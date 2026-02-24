@@ -10,10 +10,6 @@ Inconsistent communication tracking
 
 Limited visibility into outreach history
 
-Manual copy/paste workflows
-
-Poor auditability
-
 The goal of this application is to provide a centralized interface where users can initiate and track SMS conversations with leads in a structured, auditable manner.
 
 -------Target User-------
@@ -26,7 +22,7 @@ Business development teams
 
 Customer success personnel
 
-These users need a fast, intuitive interface to:
+-------These users need a fast, intuitive interface to:---------
 
 Enter or select a lead
 
@@ -50,7 +46,7 @@ Handles UI interactions and user input validation.
 API Layer
 Exposes endpoints for conversation creation, message persistence, and retrieval.
 
-Service Layer
+Minimal Service Layer (Could expand on this, right now api calls repository)
 Encapsulates business logic (conversation lifecycle, validation rules, etc.).
 
 Data Access Layer
@@ -100,8 +96,7 @@ These tradeoffs were intentional to deliver a clean, maintainable foundation.
 
 -------AI tools were used to:-------
 
-Refine UX wording and improve microcopy clarity
-
+ 
 Review architectural decisions for best practices
 
 Assist in documentation structure and formatting

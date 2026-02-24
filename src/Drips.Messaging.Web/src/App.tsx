@@ -6,7 +6,7 @@ export default function App() {
     return (
         <div style={{ padding: 20 }}>
             <h1>Drips</h1>
-
+            <h5>Initiate and track SMS conversations</h5>
             <nav style={styles.nav}>
                 <Link to="/" style={styles.navLink}>Campaigns</Link>
                 <span style={styles.divider}>|</span>
