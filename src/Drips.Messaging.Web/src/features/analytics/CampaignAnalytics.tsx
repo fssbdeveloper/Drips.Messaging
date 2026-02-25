@@ -1,20 +1,8 @@
 import { useEffect, useState } from "react";
-import { api } from "../../api/client";
+import { api } from "../../api/client"; 
+import type { Campaign } from "../../entities/Campaign";
+import type { Analytics } from "../../entities/Analytics";
 
-interface Campaign {
-    id: string;
-    name: string;
-}
-
-interface Analytics {
-    id: string;
-    totalInbound: number;
-    interested: number;
-    confused: number;
-    optOut: number;
-    engagementScore: number;
-    optOutRate: number;
-}
 
 export default function AnalyticsPage() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);

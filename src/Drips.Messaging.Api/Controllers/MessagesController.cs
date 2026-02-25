@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Drips.Messaging.Api.Controllers;
 
 [ApiController]
-
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/messages")]
 public class MessagesController : ControllerBase
 {
     private readonly MessageRepository _repository;
@@ -29,7 +30,7 @@ public class MessagesController : ControllerBase
     );
 
     [HttpPost]
-    [Route("api/messages")]
+    //[Route("api/messages")]
     public async Task<IActionResult> Ingest(IngestMessageRequest request, CancellationToken ct)
     {
           

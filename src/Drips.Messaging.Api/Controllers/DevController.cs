@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Drips.Messaging.Api.Controllers;
 
-[ApiController]
-[Route("api/dev")]
+[ApiController] 
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/dev")]
 public class DevController : ControllerBase
 {
     private readonly CampaignRepository _campaignRepository;

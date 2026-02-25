@@ -1,25 +1,8 @@
 ﻿import { useState } from "react";
 import { api } from "../../api/client";
-
-interface Campaign {
-    id: string;
-    name: string;
-}
-
-interface Conversation {
-    id: string;
-    campaignId: string;
-    leadPhone: string;
-    startedAt: string;
-}
-
-interface Message {
-    id: string;
-    conversationId: string;
-    content: string;
-    direction: number;
-    sentAtUtc: string;
-}
+import type { Message } from "../../entities/Message";
+import type { Conversation } from "../../entities/Conversation";
+import type { Campaign } from "../../entities/Campaign";
 
 export default function CampaignBuilder() {
     const [campaignName, setCampaignName] = useState("");
@@ -192,7 +175,7 @@ export default function CampaignBuilder() {
                                 {messages.map(m => (
                                     <div
                                         key={m.id}
-                                        className={`p-2 rounded mb-2 w-75 ${m.direction === 1
+                                        className={`p-2 rounded mb-2 w-5 ${m.direction === "Outbound"
                                                 ? "bg-primary text-white ms-auto"
                                                 : "bg-secondary text-white me-auto"
                                             }`}

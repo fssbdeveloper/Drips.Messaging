@@ -5,7 +5,8 @@ using Drips.Messaging.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/campaigns")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/campaigns")]
 public class CampaignsController : ControllerBase
 {
     private readonly CampaignAnalyticsRepository _analyticsRepository;

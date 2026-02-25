@@ -26,7 +26,7 @@ public class CampaignRepository
         try
         {
             // 1. Only select columns that actually exist in your Campaigns table
-            const string sql = "SELECT Id, Name, CreatedAt FROM Campaigns";
+            const string sql = "SELECT Id, Name, CreatedAt FROM Campaigns Order By CreatedAt DESC";
 
             // 2. Dapper's QueryAsync returns an IEnumerable. 
             // We call .ToList() to satisfy the IReadOnlyList return type.

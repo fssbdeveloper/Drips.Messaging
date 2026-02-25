@@ -1,8 +1,11 @@
-using Dapper;
+﻿using Dapper;
 using Drips.Messaging.Application.Services;
 using Drips.Messaging.Infrastructure.Database;
 using Drips.Messaging.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Data.Sqlite;
 using Serilog;
 using System.Data;
@@ -10,12 +13,29 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
- 
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
+
+// Add this NuGet package if not already installed:
+// Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true; // ⭐ THIS FIXES YOUR ISSUE
+});
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Your Vite port
+        policy.WithOrigins("http://localhost:5173") // React Vite port
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -56,9 +76,7 @@ builder.Services.AddScoped<ConversationRepository>();
 SqlMapper.AddTypeHandler(new GuidTypeHandler());
 var app = builder.Build();
 
-
-// --- ADD THIS SECTION ---
-// Manually resolve the factory and run the init
+ // Manually resolve the factory and run the init
 using (var scope = app.Services.CreateScope())
 {
     var factory = scope.ServiceProvider.GetRequiredService<DbConnectionFactory>();
@@ -90,7 +108,8 @@ app.Run();
 
 
 
-//to fix SQLLite guid issues, we can create a custom type handler for Dapper to convert between Guid and string
+//to fix SQLLite guid issues, we can create a custom type handler for Dapper
+//to convert between Guid and string
 
 public class GuidTypeHandler : SqlMapper.TypeHandler<Guid>
 {

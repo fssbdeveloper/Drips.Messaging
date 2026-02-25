@@ -1,23 +1,11 @@
 ﻿import { useEffect, useState } from "react";
 import { api } from "../../api/client";
+import type { Message } from "../../entities/Message";
+import type { Conversation } from "../../entities/Conversation";
+import type { Campaign } from "../../entities/Campaign";
 
-interface Campaign {
-    id: string;
-    name: string;
-}
 
-interface Conversation {
-    id: string;
-    leadPhone: string;
-    startedAt: string;
-}
 
-interface Message {
-    id: string;
-    content: string;
-    direction: number;
-    sentAtUtc: string;
-}
 
 export default function CampaignList() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -138,7 +126,7 @@ export default function CampaignList() {
                                                         {messages.map(msg => (
                                                             <div
                                                                 key={msg.id}
-                                                                className={`p-2 rounded mb-2 w-75 ${msg.direction === 1
+                                                                className={`p-2 rounded mb-2 w-5 ${msg.direction === "Outbound"
                                                                         ? "bg-primary text-white ms-auto"
                                                                         : "bg-secondary text-white me-auto"
                                                                     }`}
@@ -160,4 +148,3 @@ export default function CampaignList() {
         </div>
     );
 }
- 
