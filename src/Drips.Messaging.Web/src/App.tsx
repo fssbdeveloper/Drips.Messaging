@@ -2,11 +2,13 @@ import { Routes, Route, Link } from "react-router-dom";
 import CampaignList from "./features/campaigns/CampaignList";
 import CreateCampaign from "./features/campaigns/CreateCampaign";
 import CampaignAnalytics from "./features/analytics/CampaignAnalytics";
+import ThemeToggle from "./utility/ThemeToggle";
 export default function App() {
     return (
         <div style={{ padding: 20 }}>
             <h1>Drips</h1>
-            <h5>Initiate and track SMS conversations - v1</h5> 
+            <h5>Initiate and track SMS conversations - v1</h5>
+            <ThemeToggle />
             <nav style={styles.nav}>
                 <Link to="/" style={styles.navLink}>Campaigns</Link>
                 <span style={styles.divider}>|</span>
