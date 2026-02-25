@@ -35,6 +35,9 @@ public class MessagesController : ControllerBase
     {
           
         var signal = _classifier.Classify(request.Content);
+        
+        if (request.Direction == "Outbound")
+            signal = ConversationSignalType.Neutral;
 
         var message = new Message
         {

@@ -1,6 +1,7 @@
 ﻿using Drips.Messaging.Api.Controllers;
 using Drips.Messaging.Application.Services;
 using Drips.Messaging.Domain.Entities;
+using Drips.Messaging.Domain.Enums;
 using Drips.Messaging.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -139,7 +140,10 @@ public class CampaignsController : ControllerBase
             return NotFound("Conversation not found.");
 
         var signal = _classifier.Classify(request.Content);
-        
+    
+        if (request.Direction.ToString() == "Outbound")
+            signal = ConversationSignalType.Neutral;
+
         var message = new Message
         {
             Id = Guid.NewGuid(),
